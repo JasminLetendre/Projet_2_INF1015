@@ -29,7 +29,7 @@ namespace Logique {
 
 	bool Echiquier::deplacerPiece(int x1, int y1, int x2, int y2) {
 		auto piece = grille[x1][y1];
-        if (!piece || piece->getCouleur() != joueurActuel || !piece->estMouvementValide(x1, y1, x2, y2))
+        if (!piece || piece->couleur_ != joueurActuel || !piece->estMouvementValide(x1, y1, x2, y2))
 			return false;
 
         {
@@ -62,7 +62,7 @@ namespace Logique {
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
                 auto p = grille[i][j];
-                if (p && p->getNom()[0] == 'R' && p->getCouleur() == couleur) {
+                if (p && p->getNom()[0] == 'R' && p->couleur_ == couleur) {
                     roiX = i;
                     roiY = j;
                 }
@@ -73,7 +73,7 @@ namespace Logique {
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
                 auto p = grille[i][j];
-                if (p && p->getCouleur() != couleur && p->estMouvementValide(i, j, roiX, roiY)) {
+                if (p && p->couleur_ != couleur && p->estMouvementValide(i, j, roiX, roiY)) {
                     return true;
                 }
             }

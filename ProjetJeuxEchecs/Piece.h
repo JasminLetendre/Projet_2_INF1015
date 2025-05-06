@@ -4,19 +4,25 @@
 #pragma once
 #include "Couleur.h"
 
+namespace affichage {
+class ProjetJeuxEchecs;
+}
+
 namespace Logique {
 
 class Piece
 {
 public:
 
+    friend class affichage::ProjetJeuxEchecs;
+    friend class Echiquier;
     Piece(Couleur couleur) : couleur_(couleur) {}
     virtual ~Piece() = default;
 
     virtual bool estMouvementValide(int x1, int y1, int x2, int y2) const = 0;
     virtual const char* getNom() const = 0;
 
-    Couleur getCouleur() const {return couleur_; }
+    //Couleur getCouleur() const {return couleur_; }
 private:
     Couleur couleur_;
 };

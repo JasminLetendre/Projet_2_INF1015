@@ -9,11 +9,11 @@ Cette liste est basée sur les fichiers fournis et les exigences de la remise. E
 
 - [x] Supprimer toute logique de `QMessageBox` du modèle (`Echiquier`, `Roi`, etc.)
 - [x] Supprimer toute manipulation graphique (`setIcon`, `QPushButton`, `QPixmap`) dans le modèle
-- [ ] Corriger tous les chemins d'accès aux images Qt (ex. via `QDir::currentPath()` ou copie automatique en `.pro`)
+- [x] Corriger tous les chemins d'accès aux images Qt (ex. via `QDir::currentPath()` ou copie automatique en `.pro`)
 - [ ] Passer de `QPushButton` à `QLabel` + `QPixmap` pour dessiner l'échiquier
 - [ ] Renommer le namespace `Modele` → `Chess` (ou `Logique`, `Engine`, etc.)
-- [ ] Utiliser des noms explicites pour les coordonnées (`ligneDepart`, `colonneArrivee`, etc.)
-- [ ] Créer un `struct Position { int ligne, colonne; };` (facultatif mais recommandé)
+- [x] Utiliser des noms explicites pour les coordonnées (`ligneDepart`, `colonneArrivee`, etc.)
+- [x] Créer un `struct Position { int ligne, colonne; };` (facultatif mais recommandé)
 
 ---
 
@@ -22,7 +22,7 @@ Cette liste est basée sur les fichiers fournis et les exigences de la remise. E
 ### 🔧 Refactor et responsabilité du modèle
 - [ ] Supprimer `changerJoueur()` de `Echiquier`, le faire dans le contrôleur
 - [ ] Revoir la responsabilité d’`Echiquier` : ne plus peindre l’interface
-- [ ] Implémenter la **capture de pièces**
+- [x] Implémenter la **capture de pièces**
 - [ ] Ajouter une méthode dans chaque pièce : `std::vector<Position> mouvementsPossibles(Position pos, const Echiquier&)`
 - [ ] Déplacer la logique de mise en échec **dans les classes des pièces**
 - [ ] Intégrer la vérification de mise en échec dans les méthodes de déplacement

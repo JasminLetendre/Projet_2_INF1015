@@ -13,7 +13,7 @@
 // 
 // 
 //
-// Include ici les headers de votre partie de code à tester
+// Include ici les headers de votre partie de code a tester
 
 #if __has_include("gtest/gtest.h")
 #include "gtest/gtest.h"

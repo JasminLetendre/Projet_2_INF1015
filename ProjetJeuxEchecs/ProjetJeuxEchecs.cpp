@@ -85,7 +85,7 @@ namespace affichage {
                         QString arrivee = notation;
 
                         if (piece) {
-                            if (piece->getCouleur() != echiquier->getJoueurActuel()) {
+                            if (piece->couleur_ != echiquier->getJoueurActuel()) {
                                 QMessageBox::warning(this, "Erreur", "Ce n'est pas à ton tour !");
                             } else if (!piece->estMouvementValide(ligneSelection, colonneSelection, ligne, colonne)) {
                                 QMessageBox::warning(this, "Mouvement interdit",
