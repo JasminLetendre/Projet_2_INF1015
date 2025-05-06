@@ -7,7 +7,7 @@
 */
 
 #include "Tour.h"
-namespace Modele {
+namespace Logique {
 Tour::Tour(Couleur couleur) : Piece (couleur) {}
 
 

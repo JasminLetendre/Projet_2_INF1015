@@ -8,7 +8,7 @@
 #include "Dame.h"
 #include <cmath>
 
-namespace Modele {
+namespace Logique {
 
 Dame::Dame(Couleur couleur) : Piece (couleur) {}
 

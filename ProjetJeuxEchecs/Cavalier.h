@@ -4,7 +4,7 @@
 #include "PIECE.H"
 
 
-namespace Modele {
+namespace Logique {
 
 
 

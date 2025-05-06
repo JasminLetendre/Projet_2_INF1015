@@ -7,7 +7,7 @@
 #include <memory>
 #include "Echiquier.h"
 
-namespace interface {
+namespace affichage {
 class ProjetJeuxEchecs : public QMainWindow
 {
     Q_OBJECT
@@ -15,11 +15,12 @@ public:
     ProjetJeuxEchecs(QWidget* parent = nullptr);
     ~ProjetJeuxEchecs();
     void placerImagePiece(int i, int j, const QString& nomFichier);
+    QString notationEchecs(int ligne, int colonne);
 
 private:
     QGridLayout* grilleEchiquier = nullptr;
     std::array<std::array<QPushButton*, 8>, 8> boutons{};
-    std::unique_ptr<Modele::Echiquier> echiquier;
+    std::unique_ptr<Logique::Echiquier> echiquier;
 
     void caseCliquee();
     int caseXSelectionnee = -1;

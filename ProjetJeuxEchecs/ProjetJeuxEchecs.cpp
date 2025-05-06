@@ -16,9 +16,9 @@
 #include "Cavalier.h"
 #include "Echiquier.h"
 #include "Couleur.h"
-using namespace Modele;
+using namespace Logique;
 
-namespace interface {
+namespace affichage {
     ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget* parent)
         : QMainWindow(parent), echiquier(std::make_unique<Echiquier>())
     {
@@ -54,47 +54,49 @@ namespace interface {
 
     }
 
+    QString ProjetJeuxEchecs::notationEchecs(int ligne, int colonne) {
+        QChar colonneLettre = QChar('A' + colonne);
+        int ligneEchiquier = 8 - ligne;
+        return QString("%1%2").arg(colonneLettre).arg(ligneEchiquier);
+    }
+
     void ProjetJeuxEchecs::caseCliquee()
     {
         QObject* boutonClique = sender();
 
-        for (int i = 0; i < 8; ++i) {
-            for (int j = 0; j < 8; ++j) {
-                if (boutonClique == boutons[i][j]) {
+        for (int ligne = 0; ligne < 8; ++ligne) {
+            for (int colonne = 0; colonne < 8; ++colonne) {
+                if (boutonClique == boutons[ligne][colonne]) {
+                    QString notation = notationEchecs(ligne, colonne);
                     if (!pieceSelectionnee) {
-                        auto piece = echiquier->getPiece(i, j);
+                        auto piece = echiquier->getPiece(ligne, colonne);
                         if (piece) {
                             pieceSelectionnee = true;
-                            ligneSelection = i;
-                            colonneSelection = j;
-                            boutons[i][j]->setStyleSheet("background-color: yellow;");
+                            ligneSelection = ligne;
+                            colonneSelection = colonne;
+                            boutons[ligne][colonne]->setStyleSheet("background-color: yellow;");
+                        } else {
+                            QMessageBox::information(this, "Info", QString("La case %1 est vide.").arg(notation));
                         }
-                        else {
-                            QMessageBox::information(this, "Info",
-                                QString("La case (%1, %2) est vide.").arg(i).arg(j));
-                        }
-                    }
-                    else {
+                    } else {
                         auto piece = echiquier->getPiece(ligneSelection, colonneSelection);
 
+                        QString depart = notationEchecs(ligneSelection, colonneSelection);
+                        QString arrivee = notation;
+
                         if (piece) {
-                            // check les tours
                             if (piece->getCouleur() != echiquier->getJoueurActuel()) {
                                 QMessageBox::warning(this, "Erreur", "Ce n'est pas à ton tour !");
-                            }
-                            else if (!piece->estMouvementValide(ligneSelection, colonneSelection, i, j)) {
+                            } else if (!piece->estMouvementValide(ligneSelection, colonneSelection, ligne, colonne)) {
                                 QMessageBox::warning(this, "Mouvement interdit",
-                                    QString("La pièce '%1' ne peut pas se déplacer de (%2, %3) à (%4, %5).")
-                                    .arg(piece->getNom()).arg(ligneSelection).arg(colonneSelection).arg(i).arg(j));
-                            }// ne pas deplacer limage avant d'avoir check si il n'y ai pas d'echec 
-                            else if (!echiquier->deplacerPiece(ligneSelection, colonneSelection, i, j)) {
-                                // il ya echec donc pas de deplacement
+                                                     QString("La pièce '%1' ne peut pas se déplacer de %2 à %3.")
+                                                         .arg(piece->getNom()).arg(depart, arrivee));
+                            } else if (!echiquier->deplacerPiece(ligneSelection, colonneSelection, ligne, colonne)) {
                                 QMessageBox::warning(this, "Erreur", "Tu es en échec, tu ne peux pas faire ce déplacement.");
-                            }
-                            else {// si pas d'echec et mouvement valide ... deplacer piece et image
+                            } else {
                                 QIcon icone = boutons[ligneSelection][colonneSelection]->icon();
-                                boutons[i][j]->setIcon(icone);
-                                boutons[i][j]->setIconSize(QSize(50, 50));
+                                boutons[ligne][colonne]->setIcon(icone);
+                                boutons[ligne][colonne]->setIconSize(QSize(50, 50));
                                 boutons[ligneSelection][colonneSelection]->setIcon(QIcon());
                             }
                         }
@@ -115,33 +117,37 @@ namespace interface {
 
     void ProjetJeuxEchecs::placerImagePiece(int i, int j, const QString& nomFichier)
     {
-        std::shared_ptr<Modele::Piece> piece = nullptr;
+        std::shared_ptr<Logique::Piece> piece = nullptr;
         try {
-            Modele::Couleur couleur = nomFichier.contains("blanc", Qt::CaseInsensitive)
-                ? Modele::Couleur::Blanc
-                : Modele::Couleur::Noir;
+            Logique::Couleur couleur = nomFichier.contains("blanc", Qt::CaseInsensitive)
+                ? Logique::Couleur::Blanc
+                : Logique::Couleur::Noir;
 
             if (nomFichier.contains("roi", Qt::CaseInsensitive)) {
-                piece = std::make_shared<Modele::Roi>(couleur);
+                piece = std::make_shared<Logique::Roi>(couleur);
             }
             else if (nomFichier.contains("reine", Qt::CaseInsensitive)) {
-                piece = std::make_shared<Modele::Dame>(couleur);
+                piece = std::make_shared<Logique::Dame>(couleur);
             }
             else if (nomFichier.contains("tour", Qt::CaseInsensitive)) {
-                piece = std::make_shared<Modele::Tour>(couleur);
+                piece = std::make_shared<Logique::Tour>(couleur);
             }
             else if (nomFichier.contains("chevalier", Qt::CaseInsensitive)) {
-                piece = std::make_shared<Modele::Cavalier>(couleur);
+                piece = std::make_shared<Logique::Cavalier>(couleur);
             }
 
             if (piece) {
                 echiquier->placerPiece(i, j, piece);
-                QIcon icone(QString("images/") + nomFichier);
+                QString chemin = QDir::currentPath() + "/images/" + nomFichier;
+                if (!QFile::exists(chemin)) {
+                    QMessageBox::warning(this, "Image introuvable", "Fichier non trouvé: " + chemin);
+                }
+                QIcon icone(chemin);
                 boutons[i][j]->setIcon(icone);
                 boutons[i][j]->setIconSize(QSize(50, 50));
             }
         }
-        catch (const Modele::TropDeRoisException& e) {
+        catch (const Logique::TropDeRoisException& e) {
             QMessageBox::critical(this, "Erreur", e.what());
             boutons[i][j]->setIcon(QIcon());
         }
@@ -151,9 +157,9 @@ namespace interface {
     {
         try {
             placerImagePiece(i, j, nomFichier);
-            echiquier->placerPiece(i, j, std::make_shared<Modele::Roi>());
+            echiquier->placerPiece(i, j, std::make_shared<Logique::Roi>());
         }
-        catch (const Modele::TropDeRoisException& e) {
+        catch (const Logique::TropDeRoisException& e) {
             QMessageBox::critical(this, "Erreur - Trop de rois", e.what());
             boutons[i][j]->setIcon(QIcon());
         }

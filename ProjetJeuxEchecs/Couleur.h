@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace Modele {
+namespace Logique {
 
 enum class Couleur {
     Blanc,

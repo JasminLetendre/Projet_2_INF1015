@@ -8,7 +8,7 @@
 
 #include "Cavalier.h"
 #include <cmath>
-namespace Modele {
+namespace Logique {
 
 
 

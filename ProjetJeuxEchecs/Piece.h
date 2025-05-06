@@ -4,7 +4,7 @@
 #pragma once
 #include "Couleur.h"
 
-namespace Modele {
+namespace Logique {
 
 class Piece
 {
