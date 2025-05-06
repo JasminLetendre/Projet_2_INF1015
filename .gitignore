@@ -1,0 +1,29 @@
+# Dossiers à ignorer
+.vs/
+x64/
+Debug/
+Release/
+*.user
+*.suo
+
+# Fichiers Visual Studio
+*.vc.db
+*.opendb
+*.VC.db
+*.ipch
+*.log
+*.cache
+*.tlog
+
+# CMake ou build
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+build/
+
+# Binaires
+*.exe
+*.dll
+*.pdb
+*.obj
+

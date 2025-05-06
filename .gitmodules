@@ -1,0 +1,3 @@
+[submodule "ProjetJeuxEchecs/external/googletest"]
+	path = ProjetJeuxEchecs/external/googletest
+	url = https://github.com/google/googletest.git
