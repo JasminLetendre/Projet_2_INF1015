@@ -9,7 +9,7 @@
 #include "Roi.h"
 #include <cmath>
 
-namespace Modele {
+namespace Logique {
 
 
 int Roi::compteurRois = 0;

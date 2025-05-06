@@ -8,7 +8,7 @@
 
 #include "deplacementtemporaire.h"
 
-namespace Modele {
+namespace Logique {
 
 DeplacementTemporaire::DeplacementTemporaire(Echiquier& ech, int srcX, int srcY, int destX, int destY)
     : echiquier(ech), x1(srcX), y1(srcY), x2(destX), y2(destY) {

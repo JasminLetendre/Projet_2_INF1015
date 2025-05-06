@@ -4,7 +4,7 @@
 #include "Echiquier.h"
 #include <memory>
 
-namespace Modele {
+namespace Logique {
 
 class DeplacementTemporaire {
 public:

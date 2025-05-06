@@ -1,15 +1,15 @@
 /**
-* Test d'intégration pour le jeux d'échecs
+* Test d'integration pour le jeux d'echecs
 * \file   TestJeuxEchecs.cpp
 * \author Jasmin et Yahia
 * \date   17 avril 2025
-* Créé le 17 avril 2025
+* Cree le 17 avril 2025
 */
 
-// Fichier de test pour le projet Jeux d'échecs
-// Ce fichier contient les tests unitaires pour le projet Jeux d'échecs.
+// Fichier de test pour le projet Jeux d'echecs
+// Ce fichier contient les tests unitaires pour le projet Jeux d'echecs.
 // Pour le moment, il y a seulement des tests d'exemple.
-// Vous devez ajouter vos propres tests pour vérifier le bon fonctionnement de votre code.
+// Vous devez ajouter vos propres tests pour verifier le bon fonctionnement de votre code.
 // 
 // 
 //

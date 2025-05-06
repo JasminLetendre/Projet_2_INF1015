@@ -44,3 +44,5 @@ DISTFILES += \
     images/roi_noir.png \
     images/tour_blanc.png \
     images/tour_noir.png
+
+QMAKE_POST_LINK += xcopy /E /Y /I images $$OUT_PWD\\images

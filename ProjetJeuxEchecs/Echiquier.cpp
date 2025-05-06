@@ -12,7 +12,7 @@
 
 
 
-namespace Modele {
+namespace Logique {
 
 	Echiquier::Echiquier() {
 		for (auto& ligne : grille)

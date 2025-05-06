@@ -3,7 +3,7 @@
 #include "PIECE.H"
 
 #pragma once
-namespace Modele {
+namespace Logique {
 
 
 class Tour: public Piece

@@ -4,7 +4,7 @@
 #include "PIECE.H"
 #include <stdexcept>
 
-namespace Modele {
+namespace Logique {
 
 
 class Roi: public Piece

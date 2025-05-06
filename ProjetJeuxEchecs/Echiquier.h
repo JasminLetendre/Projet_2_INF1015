@@ -6,7 +6,7 @@
 #include <array>
 #include "Piece.h"
 
-namespace Modele {
+namespace Logique {
 
 class Echiquier {
 public:
