@@ -10,10 +10,10 @@ class Tour: public Piece
 
 {
 public:
-    Tour(Couleur couleur);
+    Tour(Couleur couleur, int colonne, int rangee);
     ~Tour();
 
-    bool estMouvementValide(int x1, int y1, int x2, int y2) const override;
+    bool estMouvementValide(int ColonneAvant, int RangeeAvant, int ColonneApres, int RangeeApres) const override;
 
     const char* getNom() const override { return "Tour"; }
 

@@ -12,14 +12,14 @@ namespace Logique {
 
 
 
-Cavalier::Cavalier(Couleur couleur) : Piece (couleur) {}
+Cavalier::Cavalier(Couleur couleur, int colonne, int rangee) : Piece (couleur, colonne, rangee) {}
 
 Cavalier::~Cavalier() {}
 
 
-bool Cavalier::estMouvementValide(int x1, int y1, int x2, int y2) const {
-    int dx = std::abs(x2 - x1);
-    int dy = std::abs(y2 - y1);
-    return (dx == 2 && dy == 1) || (dx == 1 && dy == 2);
+bool Cavalier::estMouvementValide(int ColonneAvant, int RangeeAvant, int ColonneApres, int RangeeApres) const {
+    int distanceColonne = std::abs(ColonneApres - ColonneAvant);
+    int distanceRangee = std::abs(RangeeApres - RangeeAvant);
+    return (distanceColonne == 2 && distanceRangee == 1) || (distanceColonne == 1 && distanceRangee == 2);
 }
 }

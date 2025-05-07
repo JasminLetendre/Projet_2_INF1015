@@ -14,7 +14,7 @@ namespace Logique {
 
 int Roi::compteurRois = 0;
 
-Roi::Roi(Couleur couleur) : Piece (couleur) {
+Roi::Roi(Couleur couleur, int colonne, int rangee) : Piece (couleur, colonne, rangee) {
     if (++compteurRois > 2) {
         --compteurRois;
         throw TropDeRoisException();
@@ -26,9 +26,9 @@ Roi::~Roi() {
     --compteurRois;
 }
 
-bool Roi::estMouvementValide(int x1, int y1, int x2, int y2) const {
-    int dx = std::abs(x2 - x1);
-    int dy = std::abs(y2 - y1);
-    return dx <= 1 && dy <= 1 && (dx + dy != 0);
+bool Roi::estMouvementValide(int ColonneAvant, int RangeeAvant, int ColonneApres, int RangeeApres) const {
+    int distanceColonne = std::abs(ColonneApres - ColonneAvant);
+    int distanceRangee = std::abs(RangeeApres - RangeeAvant);
+    return distanceColonne <= 1 && distanceRangee <= 1 && (distanceColonne + distanceRangee != 0);
 }
 }

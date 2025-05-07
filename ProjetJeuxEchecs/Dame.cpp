@@ -10,15 +10,15 @@
 
 namespace Logique {
 
-Dame::Dame(Couleur couleur) : Piece (couleur) {}
+Dame::Dame(Couleur couleur, int colonne, int rangee) : Piece (couleur, colonne, rangee) {}
 
 Dame::~Dame() {}
 
 
-bool Dame::estMouvementValide(int x1, int y1, int x2, int y2) const {
-    int dx = std::abs(x2 - x1);
-    int dy = std::abs(y2 - y1);
-    return (x1 == x2 || y1 == y2 || dx == dy) && !(x1 == x2 && y1 == y2);
+bool Dame::estMouvementValide(int ColonneAvant, int RangeeAvant, int ColonneApres, int RangeeApres) const {
+    int distanceColonne = std::abs(ColonneApres - ColonneAvant);
+    int distanceRangee = std::abs(RangeeApres - RangeeAvant);
+    return (ColonneAvant == ColonneApres || RangeeAvant == RangeeApres || distanceColonne == distanceRangee) && !(ColonneAvant == ColonneApres && RangeeAvant == RangeeApres);
 }
 
 }

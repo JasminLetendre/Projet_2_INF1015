@@ -12,17 +12,12 @@ class Echiquier {
 public:
     Echiquier();
 
-    bool deplacerPiece(int x1, int y1, int x2, int y2);
-    std::shared_ptr<Piece> getPiece(int x, int y) const;
-    void placerPiece(int x, int y, std::shared_ptr<Piece> piece);
-
-    Couleur getJoueurActuel() const;
-    void changerJoueur();
-    bool estEnEchec(Couleur couleur) const;
+    bool deplacerPiece(int ColonneAvant, int RangeeAvant, int ColonneApres, int RangeeApres);
+    std::shared_ptr<Piece> getPiece(int colonne, int rangee) const;
+    void placerPiece(int colonne, int rangee, std::shared_ptr<Piece> piece);
 
 private:
     std::array<std::array<std::shared_ptr<Piece>, 8>, 8> grille;
-    Couleur joueurActuel = Couleur::Blanc;
 };
 
 }

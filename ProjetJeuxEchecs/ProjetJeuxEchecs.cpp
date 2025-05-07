@@ -18,7 +18,7 @@
 #include "Couleur.h"
 using namespace Logique;
 
-namespace affichage {
+namespace Jeu {
     ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget* parent)
         : QMainWindow(parent), echiquier(std::make_unique<Echiquier>())
     {
@@ -54,10 +54,47 @@ namespace affichage {
 
     }
 
+    bool ProjetJeuxEchecs::estEnEchec(Couleur couleur) const {
+        int roiCol = -1, roiRow = -1;
+        for (const auto& piece : pieces_) {
+            if (piece->getNom()[0] == 'R' && piece->couleur_ == couleur) {
+                roiCol = piece->colonne_;
+                roiRow = piece->rangee_;
+                break;
+            }
+        }
+        if (roiCol == -1) return false;
+
+        for (const auto& piece : pieces_) {
+            if (piece->couleur_ != couleur && piece->estMouvementValide(piece->colonne_, piece->rangee_, roiCol, roiRow)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Logique::Couleur ProjetJeuxEchecs::getJoueurActuel() const {
+        return joueurActuel_;
+    }
+
+    void ProjetJeuxEchecs::changerJoueur() {
+        joueurActuel_ = (joueurActuel_ == Logique::Couleur::Blanc)
+        ? Logique::Couleur::Noir
+        : Logique::Couleur::Blanc;
+    }
+
     QString ProjetJeuxEchecs::notationEchecs(int ligne, int colonne) {
         QChar colonneLettre = QChar('A' + colonne);
         int ligneEchiquier = 8 - ligne;
         return QString("%1%2").arg(colonneLettre).arg(ligneEchiquier);
+    }
+
+    std::shared_ptr<Piece> ProjetJeuxEchecs::getPieceSurCase(int col, int row) const {
+        for (const auto& p : pieces_) {
+            if (p->colonne_ == col && p->rangee_ == row)
+                return p;
+        }
+        return nullptr;
     }
 
     void ProjetJeuxEchecs::caseCliquee()
@@ -69,7 +106,7 @@ namespace affichage {
                 if (boutonClique == boutons[ligne][colonne]) {
                     QString notation = notationEchecs(ligne, colonne);
                     if (!pieceSelectionnee) {
-                        auto piece = echiquier->getPiece(ligne, colonne);
+                        auto piece = getPieceSurCase(colonne, ligne);
                         if (piece) {
                             pieceSelectionnee = true;
                             ligneSelection = ligne;
@@ -79,25 +116,39 @@ namespace affichage {
                             QMessageBox::information(this, "Info", QString("La case %1 est vide.").arg(notation));
                         }
                     } else {
-                        auto piece = echiquier->getPiece(ligneSelection, colonneSelection);
-
+                        auto piece = getPieceSurCase(colonneSelection, ligneSelection);
+                        auto destination = getPieceSurCase(colonne, ligne);
                         QString depart = notationEchecs(ligneSelection, colonneSelection);
                         QString arrivee = notation;
 
                         if (piece) {
-                            if (piece->couleur_ != echiquier->getJoueurActuel()) {
+                            if (piece->couleur_ != joueurActuel_) {
                                 QMessageBox::warning(this, "Erreur", "Ce n'est pas à ton tour !");
                             } else if (!piece->estMouvementValide(ligneSelection, colonneSelection, ligne, colonne)) {
                                 QMessageBox::warning(this, "Mouvement interdit",
                                                      QString("La pièce '%1' ne peut pas se déplacer de %2 à %3.")
                                                          .arg(piece->getNom()).arg(depart, arrivee));
-                            } else if (!echiquier->deplacerPiece(ligneSelection, colonneSelection, ligne, colonne)) {
-                                QMessageBox::warning(this, "Erreur", "Tu es en échec, tu ne peux pas faire ce déplacement.");
                             } else {
-                                QIcon icone = boutons[ligneSelection][colonneSelection]->icon();
-                                boutons[ligne][colonne]->setIcon(icone);
-                                boutons[ligne][colonne]->setIconSize(QSize(50, 50));
-                                boutons[ligneSelection][colonneSelection]->setIcon(QIcon());
+                                int oldCol = piece->colonne_;
+                                int oldRow = piece->rangee_;
+                                piece->colonne_ = colonne;
+                                piece->rangee_ = ligne;
+
+                                if (estEnEchec(joueurActuel_)) {
+                                    piece->colonne_ = oldCol;
+                                    piece->rangee_ = oldRow;
+                                    QMessageBox::warning(this, "Erreur", "Tu es en échec, tu ne peux pas faire ce déplacement.");
+                                } else {
+                                    if (destination) {
+                                        pieces_.erase(std::remove(pieces_.begin(), pieces_.end(), destination), pieces_.end());
+                                    }
+
+                                    QIcon icone = boutons[ligneSelection][colonneSelection]->icon();
+                                    boutons[ligne][colonne]->setIcon(icone);
+                                    boutons[ligne][colonne]->setIconSize(QSize(50, 50));
+                                    boutons[ligneSelection][colonneSelection]->setIcon(QIcon());
+                                    changerJoueur();
+                                }
                             }
                         }
 
@@ -115,7 +166,7 @@ namespace affichage {
         }
     }
 
-    void ProjetJeuxEchecs::placerImagePiece(int i, int j, const QString& nomFichier)
+    void ProjetJeuxEchecs::placerImagePiece(int rangee, int colonne, const QString& nomFichier)
     {
         std::shared_ptr<Logique::Piece> piece = nullptr;
         try {
@@ -124,32 +175,33 @@ namespace affichage {
                 : Logique::Couleur::Noir;
 
             if (nomFichier.contains("roi", Qt::CaseInsensitive)) {
-                piece = std::make_shared<Logique::Roi>(couleur);
+                piece = std::make_shared<Logique::Roi>(couleur, colonne, rangee); // j'ai fait une erreurs j'ai inversé colonne et rangé pour ces modèles
+
             }
             else if (nomFichier.contains("reine", Qt::CaseInsensitive)) {
-                piece = std::make_shared<Logique::Dame>(couleur);
+                piece = std::make_shared<Logique::Dame>(couleur, colonne, rangee);  // j'ai fait une erreurs j'ai inversé colonne et rangé pour ces modèles
             }
             else if (nomFichier.contains("tour", Qt::CaseInsensitive)) {
-                piece = std::make_shared<Logique::Tour>(couleur);
+                piece = std::make_shared<Logique::Tour>(couleur, colonne, rangee);  // j'ai fait une erreurs j'ai inversé colonne et rangé pour ces modèles
             }
             else if (nomFichier.contains("chevalier", Qt::CaseInsensitive)) {
-                piece = std::make_shared<Logique::Cavalier>(couleur);
+                piece = std::make_shared<Logique::Cavalier>(couleur, colonne, rangee);  // j'ai fait une erreurs j'ai inversé colonne et rangé pour ces modèles
             }
 
             if (piece) {
-                echiquier->placerPiece(i, j, piece);
+                pieces_.push_back(piece);
                 QString chemin = QDir::currentPath() + "/images/" + nomFichier;
                 if (!QFile::exists(chemin)) {
                     QMessageBox::warning(this, "Image introuvable", "Fichier non trouvé: " + chemin);
                 }
                 QIcon icone(chemin);
-                boutons[i][j]->setIcon(icone);
-                boutons[i][j]->setIconSize(QSize(50, 50));
+                boutons[rangee][colonne]->setIcon(icone);
+                boutons[rangee][colonne]->setIconSize(QSize(50, 50));
             }
         }
         catch (const Logique::TropDeRoisException& e) {
             QMessageBox::critical(this, "Erreur", e.what());
-            boutons[i][j]->setIcon(QIcon());
+            boutons[rangee][colonne]->setIcon(QIcon());
         }
     }
 

@@ -12,6 +12,7 @@ SOURCES += \
     Cavalier.cpp \
     Dame.cpp \
     Echiquier.cpp \
+    Piece.cpp \
     ProjetJeuxEchecs.cpp \
     Roi.cpp \
     TestJeuxEchecs.cpp \

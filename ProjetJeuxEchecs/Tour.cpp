@@ -8,13 +8,13 @@
 
 #include "Tour.h"
 namespace Logique {
-Tour::Tour(Couleur couleur) : Piece (couleur) {}
+Tour::Tour(Couleur couleur, int colonne, int rangee) : Piece (couleur, colonne, rangee) {}
 
 
 Tour::~Tour() {}
 
 
-bool Tour::estMouvementValide(int x1, int y1, int x2, int y2) const {
-    return (x1 == x2 || y1 == y2) && !(x1 == x2 && y1 == y2);
+bool Tour::estMouvementValide(int ColonneAvant, int RangeeAvant, int ColonneApres, int RangeeApres) const {
+    return (ColonneAvant == ColonneApres || RangeeAvant == RangeeApres) && !(ColonneAvant == ColonneApres && RangeeAvant == RangeeApres);
 }
 }

@@ -10,8 +10,8 @@
 
 namespace Logique {
 
-DeplacementTemporaire::DeplacementTemporaire(Echiquier& ech, int srcX, int srcY, int destX, int destY)
-    : echiquier(ech), x1(srcX), y1(srcY), x2(destX), y2(destY) {
+DeplacementTemporaire::DeplacementTemporaire(Echiquier& ech, int ColonneAvant, int RangeeAvant, int ColonneApres, int RangeeApres)
+    : echiquier(ech), x1(ColonneAvant), y1(RangeeAvant), x2(ColonneApres), y2(RangeeApres) {
     pieceSource = echiquier.getPiece(x1, y1);
     pieceDestination = echiquier.getPiece(x2, y2);
     echiquier.placerPiece(x2, y2, pieceSource);

@@ -12,10 +12,10 @@ class Cavalier: public Piece
 
 {
 public:
-    Cavalier(Couleur couleur);
+    Cavalier(Couleur couleur, int colonne, int rangee);
     ~Cavalier();
 
-    bool estMouvementValide(int x1, int y1, int x2, int y2) const override;
+    bool estMouvementValide(int ColonneAvant, int RangeeAvant, int ColonneApres, int RangeeApres) const override;
 
     const char* getNom() const override { return "Cavalier"; }
 
