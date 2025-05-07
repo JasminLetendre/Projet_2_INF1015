@@ -23,8 +23,10 @@ namespace Logique {
 		grille[x][y] = piece;
 	}
 
-	std::shared_ptr<Piece> Echiquier::getPiece(int x, int y) const {
-		return grille[x][y];
+    std::shared_ptr<Piece> Echiquier::getPiece(int ligne, int colonne) const {
+        if (ligne < 0 || ligne >= 8 || colonne < 0 || colonne >= 8)
+            return nullptr;
+        return grille[ligne][colonne];
 	}
 
 	bool Echiquier::deplacerPiece(int x1, int y1, int x2, int y2) {

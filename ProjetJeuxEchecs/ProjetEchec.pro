@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     Cavalier.cpp \
+    ClickableLabel.cpp \
     Dame.cpp \
     Echiquier.cpp \
     ProjetJeuxEchecs.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     Cavalier.h \
+    ClickableLabel.h \
     Couleur.h \
     Dame.h \
     Echiquier.h \
@@ -29,6 +31,7 @@ HEADERS += \
     Roi.h \
     Tour.h \
     deplacementtemporaire.h
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
